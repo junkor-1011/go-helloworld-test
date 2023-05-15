@@ -3,24 +3,27 @@ SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := build
 
-.PHONY: setup build run clean help
+.PHONY: setup build run test clean help
 
 .git/hooks/pre-commit: .pre-commit-config.yaml
 	pre-commit install
 
 setup: .git/hooks/pre-commit
 
-hello: go.mod main.go
-	go build -o hello
+hello: cmd/hello/main.go pkg/*.go
+	go build ./cmd/hello
+	@# go build -o hello
 
 build: hello ## build binary file
 
 run: ## run app
-	@go run main.go
+	@go run cmd/hello/main.go
+
+test:
+	go test ./pkg
 
 clean: ## cleanup binary
 	@if [ -f ./hello ]; then rm hello; fi
-	@if [ -f ./go-helloworld-test ]; then rm go-helloworld-test; fi
 
 help: ## Print this help
 	@echo 'Usage: make [target]'
