@@ -3,7 +3,12 @@ SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := build
 
-.PHONY: build run clean help
+.PHONY: setup build run clean help
+
+.git/hooks/pre-commit: .pre-commit-config.yaml
+	pre-commit install
+
+setup: .git/hooks/pre-commit
 
 hello: go.mod main.go
 	go build -o hello
