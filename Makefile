@@ -19,7 +19,8 @@ run: ## run app
 	@go run main.go
 
 clean: ## cleanup binary
-	rm hello
+	@if [ -f ./hello ]; then rm hello; fi
+	@if [ -f ./go-helloworld-test ]; then rm go-helloworld-test; fi
 
 help: ## Print this help
 	@echo 'Usage: make [target]'
